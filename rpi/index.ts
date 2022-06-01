@@ -1,4 +1,5 @@
 import path from "path";
+import untildify from "untildify";
 import { getCurrentEntry, TrackingEntry } from "../shared";
 import { fileDB } from "../shared/db/file";
 import { DataQueue } from "./data";
@@ -46,9 +47,11 @@ async function main() {
 
   queue.lock();
   await drives.watch();
+  const onDisk = fileDB(untildify("~/.entries.log"), true);
 
   await trackRotations(5).forEach(() => {
     queue.insert(getCurrentEntry("wheel:5"));
+    onDisk.insert(getCurrentEntry("disk_wheel:5"));
   });
 }
 

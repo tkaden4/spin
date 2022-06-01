@@ -721,6 +721,11 @@ typescript@^4.7.0-dev.20220321:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.7.0-dev.20220321.tgz#54da9b32245ad083246219609593230ab05a3a3c"
   integrity sha512-2w0N4lMmvlOFMAup4H/OoN6OnnW+J2J9vAgXOjdk03ZrFA48LO0V2YsG/Zx5amhwmJNH8/BK8UDYRhmVM+81HQ==
 
+untildify@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/untildify/-/untildify-4.0.0.tgz#2bc947b953652487e4600949fb091e3ae8cd919b"
+  integrity sha512-KK8xQ1mkzZeg9inewmFVDNkg3l5LUhoq9kN6iWYB/CC9YMG8HA+c1Q8HwDe6dEX7kErrEVNVBO3fWsVq5iDgtw==
+
 util-deprecate@^1.0.1, util-deprecate@~1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
