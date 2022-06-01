@@ -1,8 +1,9 @@
 import path from "path";
-import { TrackingEntry } from "../shared";
+import { getCurrentEntry, TrackingEntry } from "../shared";
 import { fileDB } from "../shared/db/file";
 import { DataQueue } from "./data";
 import { DriveManager } from "./drives";
+import { trackRotations } from "./tracker";
 
 async function main() {
   const entriesFile = "entries.log";
@@ -29,27 +30,26 @@ async function main() {
     });
   });
 
-  drives.events.on("remove", async () => {
+  drives.events.on("interval", async () => {
     if ((await drives.available()).length === 0) {
+      console.log("queue locked");
       queue.lock();
+    } else {
+      console.log("queue unlocked");
+      queue.unlock();
     }
   });
 
   drives.events.on("update", async (_drive, path: string) => {
-    if ((await drives.available()).length === 1) {
-      queue.unlock();
-    }
+    console.log(_drive, path);
   });
 
   queue.lock();
   await drives.watch();
 
-  setInterval(() => {
-    queue.insert({
-      timestamp: new Date().toUTCString(),
-      wheel_id: "wheel:1",
-    });
-  }, 500);
+  await trackRotations(5).forEach(() => {
+    queue.insert(getCurrentEntry("wheel:5"));
+  });
 }
 
 main();

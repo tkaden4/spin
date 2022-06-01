@@ -17,6 +17,7 @@ export class DriveManager {
       this._drives[drive] = path;
       this._emitter.emit("update", drive, path);
     }
+    this._emitter.emit("interval");
   }
 
   async watch() {
