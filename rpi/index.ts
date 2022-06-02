@@ -51,7 +51,7 @@ async function main() {
 
   await trackRotations(5).forEach(() => {
     queue.insert(getCurrentEntry("wheel:5"));
-    onDisk.insert(getCurrentEntry("disk_wheel:5"));
+    // onDisk.insert(getCurrentEntry("disk_wheel:5"));
   });
 }
 
