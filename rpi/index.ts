@@ -49,8 +49,8 @@ async function main() {
   await drives.watch();
   const onDisk = fileDB(untildify("~/.entries.log"), true);
 
-  await trackRotations(5).forEach(() => {
-    queue.insert(getCurrentEntry("wheel:5"));
+  await trackRotations(14).forEach(() => {
+    queue.insert(getCurrentEntry("wheel:14"));
     // onDisk.insert(getCurrentEntry("disk_wheel:5"));
   });
 }
