@@ -11,7 +11,7 @@ async function main() {
   const logFile = "log.log";
 
   const drives = new DriveManager({
-    interval: 500,
+    interval: 300,
     ignore: (drive) =>
       !drive.isRemovable ||
       drive.isSystem ||
@@ -51,8 +51,18 @@ async function main() {
 
   await trackRotations(14).forEach(() => {
     queue.insert(getCurrentEntry("wheel:14"));
-    // onDisk.insert(getCurrentEntry("disk_wheel:5"));
+    onDisk.insert(getCurrentEntry("wheel:14"));
   });
 }
 
-main();
+async function run() {
+  while (true) {
+    try {
+      await main();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+run();
