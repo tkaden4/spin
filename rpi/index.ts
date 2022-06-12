@@ -7,6 +7,7 @@ import { DriveManager } from "./drives";
 import { trackRotations } from "./tracker";
 
 async function main() {
+  console.log("watcher started");
   const entriesFile = "entries.log";
   const logFile = "log.log";
 
