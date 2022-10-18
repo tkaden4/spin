@@ -13,5 +13,5 @@
     "resolveJsonModule": true,
     "outDir": "build"
   },
-  "include": ["rpi", "shared"]
+  "include": ["serial_watcher", "shared"]
 }
