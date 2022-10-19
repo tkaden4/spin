@@ -13,46 +13,34 @@
 const char *ssid = APSSID;
 const char *password = APPSK;
 
-#define BUFFER_SIZE (1024 * 4)
-
-const uint8_t **currentBuffer;
-const uint8_t **swapBuffer;
-
-const uint8_t CURRENT_BUFFER[BUFFER_SIZE];
-const uint8_t SWAP_BUFFER[BUFFER_SIZE];
-
 // Web server endpoints
 
 ESP8266WebServer server(80);
 
 void handleRoot() {
-  server.send(200, "text/html", "<h1>You are connected</h1>");
+  server.send(200, "text/html", "Mouse Endpoint Available");
 }
 
 void handleLogData() {
-
-}
-
-void handleSeeData() {
-
+  String postBody = server.arg("plain");
+  Serial.printf("%s\n", postBody);
+  server.send(200, "text/html", "posted contents");
 }
 
 void setup() {
   delay(1000);
   Serial.begin(115200);
-  Serial.println();
-  Serial.print("Configuring access point...");
-  /* You can remove the password parameter if you want the AP to be open. */
-  WiFi.softAP(ssid, password);
-
-  IPAddress myIP = WiFi.softAPIP();
-  Serial.print("AP IP address: ");
-  Serial.println(myIP);
+  while(!Serial.available()) {
+    delay(100);
+  }
   server.on("/", handleRoot);
+  server.on("/data", HTTP_POST, handleLogData);
   server.begin();
-  Serial.println("HTTP server started");
 }
 
 void loop() {
+  while(!WiFi.softAP(ssid, password)) {
+    delay(100);
+  }
   server.handleClient();
 }

@@ -5,12 +5,17 @@
 
 #define INPUT_PIN D6
 
+#ifndef APSSID
+#define APSSID "WWUMouseWheel"
+#define APPSK  "MusMusculus360"
+#define APIP "192.168.4.1"
+#endif
+
 static bool state = false;
 
 void ICACHE_RAM_ATTR onTurn() {
   state = !state;
 }
-
 
 void setup() {
   Serial.begin(115200);
@@ -29,7 +34,6 @@ void setup() {
   pinMode(INPUT_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(INPUT_PIN), onTurn, CHANGE);
 }
-
 
 void loop() {
   digitalWrite(LED_BUILTIN, state ? HIGH : LOW);
