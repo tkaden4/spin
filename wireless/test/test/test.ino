@@ -6,6 +6,8 @@
 
 #define INPUT_PIN D6
 
+
+
 #ifndef APSSID
 #define APSSID "WWUMouseWheel"
 #define APPSK "MusMusculus360"
@@ -32,43 +34,29 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(INPUT_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(INPUT_PIN), onTurn, CHANGE);
-
-  status(LOW);
-}
-
-void sendLog(String data)
-{
-  WiFiClient wifi;
-  HTTPClient http;
-  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?log=" + data + "?wheel=0");
-  int httpCode = http.GET();
-  http.end();
-}
-
-
-void sendCount(int changeCount)
-{
-  WiFiClient wifi;
-  HTTPClient http;
-  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?count=" + changeCount + "?wheel=0");
-  int httpCode = http.GET();
-  http.end();
-}
-
-void loop()
-{
-  if(WiFi.status() != WL_CONNECTED) {
-    WiFi.begin(APSSID, APPSK);
-  }
-  
-  while (WiFi.status() != WL_CONNECTED)
-  {
+  WiFi.begin(APSSID, APPSK);
+  Serial.println("connecting");
+  while(WiFi.status() != WL_CONNECTED) {
     delay(250);
     status(HIGH);
     delay(250);
     status(LOW);
   }
+  Serial.println("connected");
+  status(LOW);
+}
 
+void sendCount(int changeCount) {
+  WiFiClient wifi;
+  HTTPClient http;
+  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?count=" + changeCount);
+  int httpCode = http.GET();
+  http.end();
+  Serial.printf("HTTP response: %d\n", httpCode);
+}
+
+void loop()
+{
   delay(500);
   noInterrupts();
   int savedCount = count;
