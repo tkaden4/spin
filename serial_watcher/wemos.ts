@@ -64,7 +64,9 @@ export class WemosWatcher {
             this._emitter.emit("message", wemos.parseMessage(data));
           });
 
+          this._emitter.emit("added", drive.path);
           port.port.on("close", () => {
+            this._emitter.emit("removed", drive.path);
             delete this._ports[drive.path];
           });
         }

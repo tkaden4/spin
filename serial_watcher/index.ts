@@ -49,6 +49,13 @@ async function main() {
   await drives.watch();
 
   const wemosWatcher = new WemosWatcher({ interval: 1000, baudRate: 115200 });
+  wemosWatcher.events.on("added", (wm) => {
+    console.log(`wemos device ${wm} added`);
+  });
+  wemosWatcher.events.on("removed", (wm) => {
+    console.log(`wemos device ${wm} removed`);
+  });
+
   wemosWatcher.events.on("message", (message: WemosMessage) => {
     if (message.type === "log") {
       console.log(message.log);
