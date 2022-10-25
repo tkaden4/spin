@@ -40,7 +40,7 @@ void sendLog(String data)
 {
   WiFiClient wifi;
   HTTPClient http;
-  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?log=" + data + "?wheel=0");
+  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?log=" + data + "&wheel=0");
   int httpCode = http.GET();
   http.end();
 }
@@ -50,7 +50,7 @@ void sendCount(int changeCount)
 {
   WiFiClient wifi;
   HTTPClient http;
-  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?count=" + changeCount + "?wheel=0");
+  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?count=" + changeCount + "&wheel=0");
   int httpCode = http.GET();
   http.end();
 }
@@ -60,7 +60,7 @@ void loop()
   if(WiFi.status() != WL_CONNECTED) {
     WiFi.begin(APSSID, APPSK);
   }
-  
+
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(250);

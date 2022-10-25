@@ -15,7 +15,7 @@ const char *password = APPSK;
 static int countedRotations = 0;
 
 void data(int data, String wheel) {
-  Serial.printf("{ \"rotations\": %d, \"wheel\": \"%s\" }\n", data, wheel);
+  Serial.printf("{ \"rotations\": %d, \"wheel\": \"%s\" }\r\n", data, wheel);
 }
 
 void status(int s) {
@@ -30,36 +30,43 @@ void handleRoot() {
 
 void handleLog() {
   status(HIGH);
-  Serial.println("handling data");
+  Serial.println("handling log");
   String logData = server.arg("log");
   String wheel = server.arg("wheel");
-  int count = countParameter.toInt();
-  Serial.printf("%s: %s\n", wheel, logData);
+  Serial.printf("%s: %s\r\n", wheel, logData);
   server.send(200, "text/html", "");
   status(LOW);
 }
 
-void handleLogData() {
+void handleData() {
   status(HIGH);
   Serial.println("handling data");
   String countParameter = server.arg("count");
   int count = countParameter.toInt();
   String wheel = server.arg("wheel");
   countedRotations += count;
-  data(count);
+  data(count, wheel);
   server.send(200, "text/html", "");
   status(LOW);
 }
 
 void setup() {
   Serial.begin(115200);
+  delay(1000);
   Serial.println("Setup starting");
-  
   pinMode(LED_BUILTIN, OUTPUT);
+
+  while(!WiFi.softAP(ssid, password)) {
+    Serial.println("setting up wifi...");
+    status(HIGH);
+    delay(250);
+    status(LOW);
+    delay(250);
+  }
     
   // Set up routes
   server.on("/", handleRoot);
-  server.on("/data", HTTP_GET, handleLogData);
+  server.on("/data", HTTP_GET, handleData);
   server.on("/log", HTTP_GET, handleLog);
   server.begin();
 
@@ -67,12 +74,5 @@ void setup() {
 }
 
 void loop() {
-  while(!WiFi.softAP(ssid, password)) {
-    Serial.println("setting up wifi...");
-    status(HIGH);
-    delay(100);
-    status(LOW);
-    delay(100);
-  }
   server.handleClient();
 }

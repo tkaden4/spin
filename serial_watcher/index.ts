@@ -3,7 +3,7 @@ import { getCurrentEntry, TrackingEntry } from "../shared";
 import { fileDB } from "../shared/db/file";
 import { DataQueue } from "./data";
 import { DriveManager } from "./drives";
-import { trackRotations } from "./tracker";
+import { WemosMessage, WemosWatcher } from "./wemos";
 
 async function main() {
   console.log("watcher started");
@@ -47,11 +47,17 @@ async function main() {
 
   queue.lock();
   await drives.watch();
-  // const onDisk = fileDB(untildify("~/.entries.log"), true);
 
-  await trackRotations(14).forEach(() => {
-    queue.insert(getCurrentEntry("wheel:14"));
+  const wemosWatcher = new WemosWatcher({ interval: 1000, baudRate: 115200 });
+  wemosWatcher.events.on("message", (message: WemosMessage) => {
+    if (message.type === "log") {
+      console.log(message.log);
+    } else {
+      queue.insert(getCurrentEntry(message.wheel, message.count));
+    }
   });
+
+  wemosWatcher.watch();
 }
 
 async function run() {

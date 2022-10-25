@@ -6,6 +6,7 @@
   "author": "Kaden Thomas <thomas.kaden4@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "@serialport/parser-readline": "^10.3.0",
     "axios": "^0.26.1",
     "drivelist": "^9.2.4",
     "google-spreadsheet": "^3.2.0",
