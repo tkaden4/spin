@@ -71,7 +71,6 @@ async function run() {
     try {
       await main();
     } catch (e) {
-      throw e;
       console.log(e);
     }
   }
