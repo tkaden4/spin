@@ -6,7 +6,6 @@ import { DriveManager } from "./drives";
 import { WemosMessage, WemosWatcher } from "./wemos";
 
 async function main() {
-  console.log("watcher started");
   const entriesFile = "entries.log";
   const logFile = "log.log";
 
@@ -72,6 +71,7 @@ async function run() {
     try {
       await main();
     } catch (e) {
+      throw e;
       console.log(e);
     }
   }
