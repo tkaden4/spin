@@ -16,6 +16,11 @@ export class DataQueue<T> {
   }
 
   insert(entry: T) {
+    if (this._cache.length >= this.maxSize) {
+      console.error("Max size reached, flushing data forcibly.");
+      this.onFlush(this._cache);
+      this._cache = [];
+    }
     if (this._locked) {
       this._cache.push(entry);
     } else {
