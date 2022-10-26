@@ -62,7 +62,11 @@ export class WemosWatcher {
           port.port.on("end", () => console.log(port.port.path, "end"));
           port.port.on("error", (e) => console.error(e));
           port.parser.on("data", (data: string) => {
-            this._emitter.emit("message", wemos.parseMessage(data));
+            const message = wemos.parseMessage(data);
+            if (message.type === "data" && message.count === 0) {
+              return;
+            }
+            this._emitter.emit("message", message);
           });
 
           this._emitter.emit("added", drive.path);
