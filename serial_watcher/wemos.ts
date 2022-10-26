@@ -79,7 +79,9 @@ export class WemosWatcher {
 
   stop() {
     for (const key in this._ports) {
-      this._ports[key].port.close();
+      try {
+        this._ports[key].port.close();
+      } catch {}
       delete this._ports[key];
     }
     this._cancel();
