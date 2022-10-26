@@ -59,7 +59,9 @@ async function main() {
     if (message.type === "log") {
       console.log(message.log);
     } else {
-      queue.insert(getCurrentEntry(message.wheel, message.count));
+      const entry = getCurrentEntry(message.wheel, message.count);
+      queue.insert(entry);
+      fileDB(`~/${entriesFile}`, true, true).insert(entry);
     }
   });
 
