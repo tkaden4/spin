@@ -66,14 +66,4 @@ async function main() {
   wemosWatcher.watch();
 }
 
-async function run() {
-  while (true) {
-    try {
-      await main();
-    } catch (e) {
-      console.log(e);
-    }
-  }
-}
-
-run();
+main();

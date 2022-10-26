@@ -59,8 +59,8 @@ export class WemosWatcher {
         if (drive.manufacturer !== "1a86" || drive.productId !== "7523") continue;
         if (!(drive.path in this._ports)) {
           const port = (this._ports[drive.path] = wemos.fromPath(this._baudrate, drive.path));
-          port.port.on("end", () => console.log("end"));
-          port.port.on("error", () => console.log("error"));
+          port.port.on("end", () => console.log(port.port.path, "end"));
+          port.port.on("error", (e) => console.error(e));
           port.parser.on("data", (data: string) => {
             this._emitter.emit("message", wemos.parseMessage(data));
           });
