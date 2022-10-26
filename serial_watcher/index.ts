@@ -1,4 +1,5 @@
 import path from "path";
+import untildify from "untildify";
 import { getCurrentEntry, TrackingEntry } from "../shared";
 import { fileDB } from "../shared/db/file";
 import { DataQueue } from "./data";
@@ -61,7 +62,7 @@ async function main() {
     } else {
       const entry = getCurrentEntry(message.wheel, message.count);
       queue.insert(entry);
-      fileDB(`~/${entriesFile}`, true, true).insert(entry);
+      fileDB(untildify(`~/${entriesFile}`), true, true).insert(entry);
     }
   });
 
