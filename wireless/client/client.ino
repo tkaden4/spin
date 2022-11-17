@@ -14,6 +14,7 @@
 #define SERVER_PATH "/data"
 #endif
 
+static int ID = 0;
 static int count = 0;
 
 void ICACHE_RAM_ATTR onTurn()
@@ -40,11 +41,10 @@ void sendLog(String data)
 {
   WiFiClient wifi;
   HTTPClient http;
-  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?log=" + data + "&wheel=0");
+  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?log=" + data + "&wheel=" + ID);
   int httpCode = http.GET();
   http.end();
 }
-
 
 void sendCount(int changeCount)
 {
@@ -57,7 +57,8 @@ void sendCount(int changeCount)
 
 void loop()
 {
-  if(WiFi.status() != WL_CONNECTED) {
+  if (WiFi.status() != WL_CONNECTED)
+  {
     WiFi.begin(APSSID, APPSK);
   }
 
