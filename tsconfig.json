@@ -13,5 +13,5 @@
     "resolveJsonModule": true,
     "outDir": "build"
   },
-  "include": ["serial_watcher", "shared"]
+  "include": ["serial_watcher", "shared", "server"]
 }

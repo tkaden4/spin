@@ -33,21 +33,12 @@ void setup()
   pinMode(LED_BUILTIN, OUTPUT);
   pinMode(INPUT_PIN, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(INPUT_PIN), onTurn, CHANGE);
-
   status(LOW);
-}
-
-void sendLog(String data)
-{
-  WiFiClient wifi;
-  HTTPClient http;
-  http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?log=" + data + "&wheel=" + ID);
-  int httpCode = http.GET();
-  http.end();
 }
 
 void sendCount(int changeCount)
 {
+  Serial.printf("sending count\n", changeCount);
   WiFiClient wifi;
   HTTPClient http;
   http.begin(wifi, String("http://") + APIP + ":" + String(SERVER_PORT) + String(SERVER_PATH) + "?count=" + changeCount + "&wheel=0");
@@ -55,26 +46,35 @@ void sendCount(int changeCount)
   http.end();
 }
 
+static time_t last_time = millis();
+
 void loop()
 {
   if (WiFi.status() != WL_CONNECTED)
   {
+    Serial.printf("Connecting to %s...", APSSID);
     WiFi.begin(APSSID, APPSK);
   }
 
   while (WiFi.status() != WL_CONNECTED)
   {
+    Serial.printf(".");
     delay(250);
     status(HIGH);
     delay(250);
     status(LOW);
+    if(WiFi.status() == WL_CONNECTED) {
+      Serial.println("connected.");
+    }
   }
 
-  delay(500);
-  noInterrupts();
-  int savedCount = count;
-  count = 0;
-  interrupts();
-  sendCount(savedCount);
-  status(savedCount);
+  if(millis() - last_time >= 1000 && count > 0) {
+    noInterrupts();
+    int savedCount = count;
+    count = 0;
+    interrupts();
+    sendCount(savedCount);
+    status(savedCount);
+    last_time = millis();
+  }
 }
