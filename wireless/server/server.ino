@@ -146,7 +146,7 @@ int sd_card_error = 0;
 
 void handleRoot()
 {
-  server.send(200, "text/html", "Mouse Endpoint Available<br>Counted Rotations: " + String(countedRotations));
+  server.send(200, "text/html", "Mouse Endpoint Available<br>Counted Rotations: " + String(countedRotations) + String("<br>") + currentTime);
 }
 
 void handleTime()
@@ -154,7 +154,7 @@ void handleTime()
   status(HIGH);
   Serial.println("Handling new time update");
   String newTimeParameter = server.arg("time");
-  if (newtimeParameter.length())
+  if (newTimeParameter.length())
   {
     currentTime = newTimeParameter;
   }
@@ -165,7 +165,8 @@ void handleTime()
 void handleReset()
 {
   status(HIGH);
-  Serial.println("Handling reset") if (SD.exists(data_file_name))
+  Serial.println("Handling reset");
+  if (SD.exists(data_file_name))
   {
     if (!SD.remove(data_file_name))
     {
@@ -213,7 +214,7 @@ void handleData()
   int count = countParameter.toInt();
   String wheel = server.arg("wheel");
   countedRotations += count;
-  write_data(wheel + ", " + count);
+  write_data(currentTime + "\t" + wheel + "\t" + count);
   Serial.printf("%s, %s, %d, %d\n", currentTime, wheel, count, countedRotations);
   server.send(200, "text/html", "");
   status(LOW);
