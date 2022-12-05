@@ -1,6 +1,12 @@
-const axios = require("axios");
-import nodeCron from "node-cron";
+import { AxiosStatic } from "axios";
 
-nodeCron.schedule("*/5 * * * *", async () => {
-  await axios.get(`http://192.168.4.1/setTime?time=${new Date().toUTCString()}`);
+const axios: AxiosStatic = require("axios");
+const cron = require("node-cron");
+
+cron.schedule("*/15 * * * * *", () => {
+  axios
+    .get(`http://192.168.4.1/setTime?time=${new Date().toUTCString()}`, {
+      timeout: 5000,
+    })
+    .catch((e: any) => console.error(`Unable to set time: ${e}`));
 });
